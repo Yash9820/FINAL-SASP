@@ -109,11 +109,15 @@ def register():
 		cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor) 
 		result=cursor.execute('SELECT * FROM register WHERE email = % s ', [email])
 		result1=cursor.execute('SELECT * FROM register WHERE Enrollment = % s ', [Enrollment])
+		result2=cursor.execute('SELECT * FROM register WHERE contact = % s ', [contact])
 		if result>0:
-			flash('That Email is already Registered, please choose another','danger')
+			flash('That Email is already Registered','danger')
 			return render_template('register.html', form=form)
 		elif result1>0:
-			flash('That Enrollment is already Registered, please choose another','danger')
+			flash('That Enrollment is already Registered','danger')
+			return render_template('register.html', form=form)
+		elif result2>0:
+			flash('That Mobile Number is already Registered','danger')
 			return render_template('register.html', form=form)
 		else:
 			entry = Register(name=name,email = email,Enrollment = Enrollment,Gender = Gender,birth= birth,contact=contact,semester = semester,city = city,state = state,Address = Address,pincode = pincode,password = secure_password,confirm_password=secure_password,authorization=authorization)
