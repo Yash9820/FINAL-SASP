@@ -35,7 +35,7 @@ application.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(application) 
 db = SQLAlchemy(application)
 bcrypt=Bcrypt(application)
-login_manager=LoginManager(application)
+
 
 @application.before_request
 def before_request():
