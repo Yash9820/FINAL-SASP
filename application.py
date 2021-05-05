@@ -1331,7 +1331,7 @@ def logout15():
 
 @application.errorhandler(413)
 def too_large(e):
-	return '''<h2>Maximum File Size is 10MB</h2>'''
+	return '''<h2 style="color:red;">Maximum File Size is 10MB</h2>'''
 
 @application.route('/viewassignmentbyprofessor/<string:id>', methods = ['POST','GET'])
 def viewassignmentbyprofessor(id):
