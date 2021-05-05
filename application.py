@@ -1330,8 +1330,7 @@ def logout15():
 @application.errorhandler(413)
 def largefile_error(e):
     flash("Large file",'danger')
-    return redirect(url_for("uploadans")), 413
-
+    return redirect(url_for('viewassignmentsb',id=id)), 413
 
 @application.errorhandler(413)
 def too_large(e):
