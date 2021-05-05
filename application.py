@@ -391,11 +391,15 @@ def teacheregister():
 		cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor) 
 		result=cursor.execute('SELECT * FROM teacherregister WHERE email = % s ', [email])
 		result1=cursor.execute('SELECT * FROM teacherregister WHERE Tid = % s ', [Tid])
+		result2=cursor.execute('SELECT * FROM teacherregister WHERE contact = % s ', [contact])
 		if result>0:
-			flash('That Email is already Registered, please choose another','danger')
+			flash('That Email is already Registered','danger')
 			return render_template('teachergister.html', form=form)
 		elif result1>0:
-			flash('That Teacher Id is already Registered, please choose another','danger')
+			flash('That Teacher Id is already Registered','danger')
+			return render_template('teachergister.html', form=form)
+		elif result2>0:
+			flash('That Mobile Number is already Registered','danger')
 			return render_template('teachergister.html', form=form)
 		else:
 			entry = Teacherregister(name=name,email = email,Tid = Tid,Gender = Gender,birth= birth,contact=contact,department = department,qualifications = qualifications,designation = designation,Address = Address,pincode = pincode,password = secure_password,confirm_password=secure_password,authorization=authorization)
