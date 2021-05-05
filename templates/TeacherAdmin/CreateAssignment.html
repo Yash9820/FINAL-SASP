@@ -1,0 +1,251 @@
+<head>
+        <title>Create Assignmet</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script>
+$(function(){
+    var dtToday = new Date();
+    
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    
+    var minDate= year + '-' + month + '-' + day;
+    
+    $('#start').attr('min', minDate);
+});
+</script>
+	</head>
+{% extends "TeacherAdmin/layout1.html" %}
+{% block body %}
+<style>
+
+</style>
+
+
+
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+		{% include "message.html" %}
+		     <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fa fa fa-plus-square"></i>Create A Assignmet Form</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/teachersignup">Home</a></li>
+              <li><i class="fa fa-plus-square"></i>Create A Assignmet</li>
+              
+            </ol>
+          </div>
+        </div>
+		<form class="form-validate form-horizontal" action="/crassign" enctype="multipart/form-data" method="POST" id="feedback_form"  role="form">
+                 <div class="form-group">
+                    <label class="col-sm-2 control-label">Assignmet Title<span class="required">*</span></label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="stitle" placeholder="Enter a Assignmet Title" required>
+                    </div>
+                  </div>
+				     <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Professor Id<span class="required">*</span></label>
+                    <div class="col-lg-10">
+                      <select name="Tid" data-live-search="true" id="car_brand" class="form-control m-bot15" title="Select Professor Id" required> 
+                  
+					
+                    <option value="{{session.Tid}}">{{session.Tid}}</option>
+                   
+                    </select>
+
+                    </div>
+                  </div>
+				  	
+					<div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Professor Department<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					
+                      <select name="pdpart" id="car_brandd" class="form-control m-bot15" required>
+								<option value="">..Select..</option>
+					
+					
+					
+
+                    <option value="{{session.department}}">{{session.department}}</option>
+                   
+                                          </select>
+
+                    </div>
+                  </div>
+			
+				  
+				      <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">For Semester<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					
+                      <select name="sem" id="car_brandd" class="form-control m-bot15" required>
+								<option value="">..Select..</option>
+					{% for row in carbrands %}
+					{% if session.Tid==row.Tid %}
+					
+
+                    <option value="{{row.sem}}">{{row.sem}}</option>
+                    {% endif %} {% endfor %}
+                                          </select>
+
+                    </div>
+                  </div>
+				  	    <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Subject Name<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					
+                      <select name="sname" data-live-search="true" id="car_modelss" class="form-control m-bot15" title="Select Professor Id" required> 
+                <option value="">..Select..</option>
+                        {% for row in carbrands %}
+					{% if session.Tid==row.Tid %}
+
+                    <option value="{{row.sname}}">{{row.sname}}</option>
+                   {% endif %} {% endfor %}
+                                          </select>
+                    
+                    </select>
+
+                    </div>
+                  </div>
+				 
+				       <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Professor Name<span class="required">*</span></label>
+                    <div class="col-lg-10">
+                      <select name="name" data-live-search="true" id="car_models" class="form-control" title="Select Professor Name" required>  </select>
+									
+                    </div>
+                  </div>
+
+				      <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Your Email<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					<select name="email" data-live-search="true" id="car_model" class="form-control" title="Select Professor Email" required> </select>
+
+                    </div>
+                  </div>
+				    <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Assignmet File<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					<input type="file" id="test" name="inputFile" accept=".doc,.docx,.txt,.pdf"/>
+
+                    </div>
+                  </div>
+				   <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Start Date<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					<input type="date"  name="sdate" id="start" required>
+
+                    </div>
+                  </div>
+				    <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Due Date<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					<input type="date" id="end" name="ddate" required>
+
+                    </div>
+                  </div>
+				    <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Assignmet Description<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					<textarea id="w3review" name="adescription" rows="4" cols="50">
+   
+					</textarea>
+
+                    </div>
+                  </div>
+				  <div class="form-group">
+                    <label class="col-sm-2 control-label">Assignmet Marks<span class="required">*</span></label>
+                    <div class="col-sm-10">
+                      <input type="number" class="form-control" name="amark" min="5" max="50" placeholder="Enter a Assignmet Marks" required>
+                    </div>
+                  </div>
+               
+                
+                  <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-10">
+                      <button type="submit" class="btn btn-danger">Submit</button>
+                    </div>
+                  </div>
+                </form>
+		</div>
+      </div>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='subject/jquery.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap-select.min.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap.min.js')}}"></script>
+
+    <script>
+            $(document).ready(function () {
+                $("#car_brand").selectpicker();
+   
+                $("#car_models").selectpicker();
+				
+				$("#car_model").selectpicker();
+   
+                function load_data(type, category_id) {
+                    $.ajax({
+                        url: "/carbrand",
+                        method: "POST",
+                        data: { type: type, category_id: category_id },
+                        dataType: "json",
+                        success: function (data) { //alert(category_id)
+                            var html = "";
+							var html1 = "";
+                            for (var count = 0; count < data.length; count++) {
+                                html += '<option value="' + data[count].name + '">' + data[count].name +"</option>";
+								
+								
+								
+                            }
+							  for (var count = 0; count < data.length; count++) {
+                                html1 += '<option value="' + data[count].email + '">' + data[count].email +"</option>";
+								
+								
+								
+                            }
+                            if (type == "carData") {
+                                $("#car_brand").html(html);
+                                $("#car_brand").selectpicker("refresh");
+                            } else  {
+                                $("#car_models").html(html);
+                                $("#car_models").selectpicker("refresh");
+								$("#car_model").html(html1);
+                                $("#car_model").selectpicker("refresh");
+                            }
+							
+							
+                        },
+                    });
+                }
+   
+                $(document).on("change", "#car_brand", function () {
+                    var category_id = $("#car_brand").val();
+                    load_data("carModeldata", category_id);
+                });
+            });
+        </script>
+
+<script type="text/javascript">
+var start = document.getElementById('start');
+var end = document.getElementById('end');
+
+start.addEventListener('change', function() {
+    if (start.value)
+        end.min = start.value;
+}, false);
+end.addEventLiseter('change', function() {
+    if (end.value)
+        start.max = end.value;
+}, false);
+</script>
+</body>
+</html>	
+				{% endblock %}

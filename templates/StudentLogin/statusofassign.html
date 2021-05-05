@@ -1,0 +1,119 @@
+<head>
+        <title>Status Of Assignments</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    <style>
+#table1 {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table1 td, #table1 th {
+  border: 1px solid #ddd;
+  padding: 13px;
+}
+
+#table1 tr:nth-child(even){background-color: #f2f2f2;}
+
+#table1 tr:hover {background-color: #ddd;}
+
+#table1 th {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: left;
+  background-color: #000000;
+  color: white;
+}
+.white-box { width: 100%; height: 100%; margin-top: 5px; margin-left: left; margin-right: auto;   
+  
+background: rgba(255,255,255,0.9);
+padding: px;
+-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;
+}
+
+</style>
+
+	</head>
+{% extends "StudentLogin/layout1.html" %}
+{% block body %}
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+		     <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fa fa fa-address-card"></i>Show Status of Your Assignment</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/stsignup">Home</a></li>
+              <li><i class="fa fa-address-card"></i><a href="/showsubjectassignment">Show Status of Your Assignment</a></li>
+              <li><i class="fa fa-address-card"></i>Status Of Assignment</li>
+            </ol>
+          </div>
+        </div>
+			<div class="white-box">
+  <h2 style="color:Solid Black;">Show Status of Your Assignment</h2>
+  
+  <table id="table1">
+    <thead class="thead-dark">
+      <tr>
+        <th>Sr No</th>
+        <th>Subject Name</th>
+		<th>stitle</th>
+		<th>Assignment Uploaded By</th>
+		<th>Student Enrollment-No</th>
+		<th>Student Name</th>
+		<th>Your Semester</th>
+		<th>Answer Of Assignment</th>
+		<th>Uploaded Date</th>
+		<th>Status</th>
+		<th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+     {% for data in showstatus %}
+	 {% if session.Enrollment==data.Enrollment %}
+      <tr>
+        <td>{{data.id}}</td>
+        <td>{{data.sname}}</td>
+		<td>{{data.stitle}}</td>
+		<td>{{data.pname}}</td>
+		<td>{{data.Enrollment}}</td>
+        <td>{{data.name}}</td>
+		<td>{{data.semester}}</td>
+		<td>{{data.file}}</td>
+		<td>{{data.uploaddate}}</td>
+		{% if data.asmark=='null' %}
+			<td style="color:red;">Unchecked </td>
+		{% else %}
+			<td style="color:Green;">checked </td>
+		{% endif %}
+		  <td width="150">
+              <a href="/viewuploadans/{{data.id}}" class="btn btn-danger btn-delete btn-sm">View</a>
+            </td>
+      </tr>
+	
+	 {% endif %}
+     {% endfor %}
+
+    </tbody>
+  </table>
+  
+</div>
+		</div>
+      </div>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='subject/jquery.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap-select.min.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap.min.js')}}"></script>
+
+</body>
+</html>	
+				{% endblock %}

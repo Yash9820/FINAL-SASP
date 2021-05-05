@@ -1,0 +1,120 @@
+<head>
+        <title>Student Home-Page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+  
+	</head>
+{% extends "StudentLogin/layout1.html" %}
+{% block body %}
+<style>
+
+</style>
+<style type="text/css">
+/* Google font */
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+ 
+#digit_clock_time {
+  font-family: 'Work Sans', sans-serif;
+  color: #66ff99;
+  font-size: 35px;
+  text-align: center;
+  padding-top: 15px;
+}
+#digit_clock_date {
+  font-family: 'Work Sans', sans-serif;
+  color: #66ff99;
+  font-size: 20px;
+  text-align: center;
+  padding-top: 2px;
+  padding-bottom: 20px;
+}
+.digital_clock_wrapper{
+    background-color: #000000;
+    padding:2px;
+    max-width: 250px;
+    text-align: center;
+    border-radius: 4px;
+    float:right;
+}
+
+</style>
+    <div class="main_content">
+        <div class="header">Welcome!! {{ email }} </div>
+				  <div class="digital_clock_wrapper">
+   <div id="digit_clock_time"></div>
+   <div id="digit_clock_date"></div>
+ </div>
+        <div class="info">
+		{% include "message.html" %}
+		  <br>
+		  {% if session.authorization==1 %}
+		  <div class="">
+		  <h2 align="center"> Notice Board </h2>
+		  
+		  <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+		  {% for data in showannounce %}
+		  {% if session.semester==data.sem %}
+
+		  <div>
+          <img src="{{ url_for('static', filename='bulletin.png')}}" ALIGN="left" alt="Avatar" style="width:100px;border-radius: 50%;">
+            <BR CLEAR="right" />
+			<h3>{{ data.name }} From {{ data.pdpart }}</h3>
+		<h4 style="padding-left:5em" >{{ data.atitle }}</h4>
+		<h4 style="padding-left:5.5em" >{{ data.adescription }}</h4>
+		<h4 style="padding-left:5.5em" >{{ data.adate }}	</h4>
+			<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+			</div>
+			{% endif %}
+			{% endfor %}
+          </div>
+		  {% else %}
+		  <h2> You Are Non-Authorized </h2>
+		  {% endif %}
+      </div>
+    </div>
+</div>
+   <script type="text/javascript">
+function currentTime() {
+  var date = new Date(); /* creating object of Date class */
+  var hour = date.getHours();
+  var min = date.getMinutes();
+  var sec = date.getSeconds();
+  var midday = "AM";
+  midday = (hour >= 12) ? "PM" : "AM"; /* assigning AM/PM */
+  hour = (hour == 0) ? 12 : ((hour > 12) ? (hour - 12): hour); /* assigning hour in 12-hour format */
+  hour = changeTime(hour);
+  min = changeTime(min);
+  sec = changeTime(sec);
+  document.getElementById("digit_clock_time").innerText = hour + " : " + min + " : " + sec + " " + midday; /* adding time to the div */
+ 
+  var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+ 
+  var curWeekDay = days[date.getDay()]; // get day
+  var curDay = date.getDate();  // get date
+  var curMonth = months[date.getMonth()]; // get month
+  var curYear = date.getFullYear(); // get year
+  var date = curWeekDay+", "+curDay+" "+curMonth+" "+curYear; // get full date
+  document.getElementById("digit_clock_date").innerHTML = date;
+ 
+  var t = setTimeout(currentTime, 1000); /* setting timer */
+}
+ 
+function changeTime(k) { /* appending 0 before time elements if less than 10 */
+  if (k < 10) {
+    return "0" + k;
+  }
+  else {
+    return k;
+  }
+}
+ 
+currentTime();
+ 
+</script>
+
+
+</body>
+</html>	
+{% endblock %}

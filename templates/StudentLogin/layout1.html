@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Side Navigation Bar</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+	<style>
+.wrapper .sidebar{
+  width: 210px;
+  height: 100%;
+  background: #000000;
+  padding: 30px 0px;
+  position: fixed;
+}
+
+.wrapper .main_content .header{
+  padding: 20px;
+  background: #000000;
+  color: #ffffff;
+  border-bottom: 1px solid #e0e4e8;
+}
+.wrapper .sidebar h5{
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+</style>
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar">
+        <h5>{{ session.name }}</h5>
+		<h5>Enrollment No:- {{ session.Enrollment }} </h5>
+        <ul>
+		  {% if session.authorization==1 %}
+            <li><a href="/stsignup"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="/studentprofile"><i class="fas fa-user"></i>Profile</a></li>
+	
+            <li><a href="/showassignment"><i class="fas fa-address-card"></i>Show And Update Assignments</a></li>
+            
+			<li><a href="/showsubjectassignment"><i class="fas fa-project-diagram"></i>Show Status of Your Assignments</a></li>
+            <!--<li><a href="#"><i class="fas fa-blog"></i>Blogs</a></li>
+            <li><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+            <li><a href="#"><i class="fas fa-map-pin"></i>Map</a></li>-->
+			<li><a href="logout3"><i class="fas fa-power-off"></i>Logout</a></li>
+			{% else %}
+			             <li><a href=""><i class=""></i>You Are Non-Authorized</a></li>
+						 <li><a href="logout3"><i class="fas fa-power-off"></i>Logout</a></li>
+			{% endif %}
+        </ul> 
+		
+    </div>
+		
+		{% block body %} {% endblock %}
+		
+	

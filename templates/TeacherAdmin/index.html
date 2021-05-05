@@ -1,0 +1,181 @@
+<head>
+        <title>Student Assignment Submission-Home-Page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    </head>
+{% extends "TeacherAdmin/layout1.html" %}
+{% block body %}
+<style>
+
+</style>
+<style type="text/css">
+/* Google font */
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+ 
+#digit_clock_time {
+  font-family: 'Work Sans', sans-serif;
+  color: #66ff99;
+  font-size: 35px;
+  text-align: center;
+  padding-top: 15px;
+}
+#digit_clock_date {
+  font-family: 'Work Sans', sans-serif;
+  color: #66ff99;
+  font-size: 20px;
+  text-align: center;
+  padding-top: 2px;
+  padding-bottom: 20px;
+}
+.digital_clock_wrapper{
+    background-color: #000000;
+    padding:2px;
+    max-width: 250px;
+    text-align: center;
+    border-radius: 4px;
+    float:right;
+}
+
+</style>
+    <div class="main_content">
+        <div class="header" >Welcome!! {{ email }}  </div>  
+		<div class="digital_clock_wrapper">
+   <div id="digit_clock_time"></div>
+   <div id="digit_clock_date"></div>
+ </div>
+ 
+        <div class="info">
+		{% if session.authorization==1 %}
+		{% include "message.html" %}
+           <br>
+          	<form class="form-validate form-horizontal" action="/announcement" enctype="multipart/form-data" method="POST" id="feedback_form"  role="form">
+                 <h3 class="page-header"><i class="fa fa fa-plus-square"></i>Make A Announcement</h3>
+				 <div class="form-group">
+                    <label class="col-sm-2 control-label">Title<span class="required">*</span></label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="atitle" placeholder="Enter a Announcement Title" required>
+                    </div>
+                  </div>
+				
+					<div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess"> Department<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					
+                      <select name="pdpart" id="car_brandd" class="form-control m-bot15" required>
+								<option value="">..Select..</option>
+					
+					
+					
+
+                    <option value="{{session.department}}">{{session.department}}</option>
+                   
+                                          </select>
+
+                    </div>
+                  </div>
+			
+				  
+				      <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">For Semester<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					
+                      <select name="sem" id="car_brandd" class="form-control m-bot15" required>
+								<option value="">..Select..</option>
+					{% for row in carbrands %}
+					{% if session.Tid==row.Tid %}
+					
+
+                    <option value="{{row.sem}}">{{row.sem}}</option>
+                    {% endif %} {% endfor %}
+                                          </select>
+
+                    </div>
+                  </div>
+				  
+				 
+				       <div class="form-group">
+                    
+                   
+                                            <input type="hidden" class="form-control" name="name" value="{{ session.name }}"  required>
+									
+                   
+                  </div>
+				  
+				  				       <div class="form-group">
+                    
+                   
+                                            <input type="hidden" class="form-control" name="Tid" value="{{ session.Tid }}"  required>
+									
+                   
+                  </div>
+				  
+				  
+
+				      <div class="form-group">
+                    <label class="control-label col-lg-2" for="inputSuccess">Description<span class="required">*</span></label>
+                    <div class="col-lg-10">
+					<textarea id="w3review" name="adescription" rows="4" cols="50">
+   
+					</textarea>
+
+                    </div>
+                  </div>
+             
+				
+               
+                
+                  <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-10">
+                      <button type="submit" class="btn btn-danger">Submit</button>
+                    </div>
+                  </div>
+                </form>
+         {% else %}
+  <h3> You are Non-Authorized</h3>
+ {% endif %}
+      </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+function currentTime() {
+  var date = new Date(); /* creating object of Date class */
+  var hour = date.getHours();
+  var min = date.getMinutes();
+  var sec = date.getSeconds();
+  var midday = "AM";
+  midday = (hour >= 12) ? "PM" : "AM"; /* assigning AM/PM */
+  hour = (hour == 0) ? 12 : ((hour > 12) ? (hour - 12): hour); /* assigning hour in 12-hour format */
+  hour = changeTime(hour);
+  min = changeTime(min);
+  sec = changeTime(sec);
+  document.getElementById("digit_clock_time").innerText = hour + " : " + min + " : " + sec + " " + midday; /* adding time to the div */
+ 
+  var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+ 
+  var curWeekDay = days[date.getDay()]; // get day
+  var curDay = date.getDate();  // get date
+  var curMonth = months[date.getMonth()]; // get month
+  var curYear = date.getFullYear(); // get year
+  var date = curWeekDay+", "+curDay+" "+curMonth+" "+curYear; // get full date
+  document.getElementById("digit_clock_date").innerHTML = date;
+ 
+  var t = setTimeout(currentTime, 1000); /* setting timer */
+}
+ 
+function changeTime(k) { /* appending 0 before time elements if less than 10 */
+  if (k < 10) {
+    return "0" + k;
+  }
+  else {
+    return k;
+  }
+}
+ 
+currentTime();
+ 
+</script>
+</body>
+</html>	
+{% endblock %}

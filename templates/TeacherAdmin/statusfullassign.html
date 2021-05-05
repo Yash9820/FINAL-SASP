@@ -1,0 +1,86 @@
+<head>
+        <title>Subject Wise Assignments</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    <style>
+#table1 {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table1 td, #table1 th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#table1 tr:nth-child(even){background-color: #f2f2f2;}
+
+#table1 tr:hover {background-color: #ddd;}
+
+#table1 th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #000000;
+  color: white;
+}
+</style
+	</head>
+{% extends "TeacherAdmin/layout1.html" %}
+{% block body %}
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+		     <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fa fa fa-address-card"></i>Show Your Assignment</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/teachersignup">Home</a></li>
+              <li><i class="fa fa-address-card"></i>Show Status of Your Assignment</li>
+              
+            </ol>
+          </div>
+        </div>
+			<div>
+  <h2>Assignment By Subject Wise</h2>
+  
+  <table id="table1">
+    <thead class="thead-dark">
+      <tr>
+        <th>Sr No</th>
+        <th>Subject Name</th>
+        <th>Professor Name</th>
+		<th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+     {% for data in showst %}
+	 {% if session.Tid==data.Tid %}
+      <tr>
+        <td>{{loop.index}}</td>
+        <td>{{data.sname}}</td>
+        <td>{{data.name}}</td>
+		
+		  <td width="150">
+              <a href="/showallassignment/{{data.sname}}" class="btn btn-danger btn-delete btn-sm">View Assignments</a>
+            </td>
+      </tr>
+	  {% endif %}
+     {% endfor %}
+
+    </tbody>
+  </table>
+  
+</div>
+		</div>
+      </div>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='subject/jquery.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap-select.min.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap.min.js')}}"></script>
+
+</body>
+</html>	
+				{% endblock %}	

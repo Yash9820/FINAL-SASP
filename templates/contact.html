@@ -1,0 +1,32 @@
+ 
+ {% extends "layout.html" %}
+{% block body %}
+
+ <div class="w3-container w3-content w3-padding-64" style="max-width:800px" id="contact">
+    <h2 class="w3-wide w3-center">CONTACT</h2>
+    <p class="w3-opacity w3-center"><i>Fan? Drop a note!</i></p>
+    <div class="w3-row w3-padding-32">
+      <div class="w3-col m6 w3-large w3-margin-bottom">
+        <i class="fa fa-map-marker" style="width:30px"></i> Ganpat University,Ahmedabad<br>
+        <i class="fa fa-phone" style="width:30px"></i> Phone: +91 9999878398<br>
+        <i class="fa fa-envelope" style="width:30px"> </i> Email: info@ict.gnu.ac.in<br>
+      </div>
+      <div class="w3-col m6">
+        <form action="/action_page.php" target="_blank">
+          <div class="w3-row-padding" style="margin:0 -16px 8px -16px">
+            <div class="w3-half">
+              <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name">
+            </div>
+            <div class="w3-half">
+              <input class="w3-input w3-border" type="text" placeholder="Email" required name="Email">
+            </div>
+          </div>
+          <input class="w3-input w3-border" type="text" placeholder="Message" required name="Message">
+          <button class="w3-button w3-black w3-section w3-right" type="submit">SEND</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="mapouter"><div class="gmap_canvas"><iframe width="2200" height="400" id="gmap_canvas" src="https://maps.google.com/maps?q=ICT%20Ganpat%20university%20a%20110,%20Vishwas%20City%201,%20Sola,%20Ahmedabad,%20Gujarat%20380061&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://kissanime-ws.com">kissanime</a><br><style>.mapouter{position:relative;text-align:right;height:400px;width:2200px;}</style><a href="https://google-map-generator.com">embed a google map</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:400px;width:2200px;}</style></div></div>
+
+  {% endblock %}

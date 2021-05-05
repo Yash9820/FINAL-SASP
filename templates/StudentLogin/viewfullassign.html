@@ -1,0 +1,198 @@
+<head>
+        <title>Assignments Details</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+        
+	<style>
+#table1 {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table1 td, #table1 th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#table1 tr:nth-child(even){background-color: #f2f2f2;}
+
+#table1 tr:hover {background-color: #ddd;}
+
+#table1 th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #000000;
+  color: white;
+}
+.btn {
+  background-color: Black;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlack;
+}
+div.b {
+  position: absolute;
+  right: 300;
+  width: 300px;
+  height: 220px;
+  border: 6px solid black;
+}
+.white-box { width: 100%; height: 70%; margin-top: 5px; margin-left: left; margin-right: auto;   
+  
+background: rgba(255,255,255,0.9);
+padding: px;
+-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;
+}
+
+</style>
+	</head>
+{% extends "StudentLogin/layout1.html" %}
+{% block body %}
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+		{% include "message.html" %}
+		     <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fa fa fa-address-card"></i>Show Your Assignment</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/stsignup">Home</a></li>
+              <li><i class="fa fa-address-card"></i><a href="/showassignment">Show Your Assignment</a></li>
+			  <li><i class="fa fa-address-card"></i>Subject Wise Assignment</li>
+              
+            </ol>
+          </div>
+        </div>
+			<div class="white-box">
+					<form class="form-validate form-horizontal" action="/uploadans" enctype="multipart/form-data" method="POST" id="feedback_form"  role="form">
+			{% for data in showstsb %}
+  <h2 style="color:black;">{{ data.stitle }}</h2></strong>
+  <strong><h4 style="color:black;">{{ data.name }}. &nbsp;&nbsp; Assignment Posting Date:-{{ data.sdate }}</h4>
+  <h4 align="right" style="color:black;"> Due date:-	{{ data.ddate}} </h4>
+  <h4 style="color:black;">  Assignment Mark:- {{ data.amark }} </h4>
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+   <div>
+
+
+
+ 
+   
+   
+   <label><h3>Assignment File</h3></label>
+   <br>
+ <a class="btn" href="{{ url_for('down',file=data.file )}}" download>
+     <span>{{ data.file.rsplit('.',1)[0] }} | </span>&nbsp;<i class="fa fa-download"></i>
+ </a>
+ {% for data1 in showans %}
+{% if  data1.Enrollment==session.Enrollment  %}
+                
+
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			
+			{% if data1.asmark=='null' %}
+			<label><h3 style="color:Green;">You Have Already Uploaded Your Assignment So You Can Update</h3></label> {% endif %}
+   <div class="col-lg-10">
+					 <br>
+					 <label><h3>Answer File</h3></label>
+					 <br><a class="btn" href="{{ url_for('downans',file=data1.file )}}" download>
+     <span>{{ data1.file.rsplit('.',1)[0] }} | </span>&nbsp;<i class="fa fa-download"></i>
+ </a>
+                    </div>
+				 
+
+{% if data1.asmark=='null' %}
+
+<h2></h2>
+{% else %}
+
+				     <h2 style="color:Red;float:left;"> Assignment Graded </h2>
+				  
+
+      
+
+{% endif %}
+
+
+ {% endif %}
+
+{% endfor %}
+ </div>
+
+{% if datetime > data.ddate %}
+<div style="  position: absolute;
+  right: 300;
+  ">
+				     <h2 style="color:Red;"> Submission Date is Over </h2>
+				  </div>
+{% else %}
+ <div class="b" ><div class="form-group">
+</br>
+&nbsp;&nbsp;&nbsp;&nbsp;<label><h3>Upload Your Answer</h3></label>
+ <div class="col-lg-10">
+<input type="file" id="test" name="inputFile"  accept=".doc,.docx,.txt,.pdf" required />
+					</div>  
+                 </div>
+				  <center><button type="submit" class="btn btn-danger">Submit</button></center>
+				  </div>
+				  
+{% endif %}	
+				  <br>
+<br><br><br><br><br><br><br><br><br><br><div   style="text-align:justify"><h4 style="color:black;"> <b>ASSIGNMENT DESCRIPTION:-</b><br><br>{{ data.adescription }} </h4></div>
+
+		  
+                     <div class="col-sm-10">
+                      <input type="hidden" class="form-control" name="sname" value="{{ data.sname }}"  required>
+                    </div>
+                    <div class="col-sm-10">
+                      <input  type="hidden" class="form-control" name="stitle" value="{{ data.stitle }}" required>
+                    </div>
+					<div class="col-sm-10">
+                      <input  type="hidden" class="form-control" name="id" value="{{ data.id }}"  required>
+                    </div>
+					<div class="col-sm-10">
+                      <input type="hidden" class="form-control" name="pname" value="{{ data.name }}"  required>
+                    </div>
+					<div class="col-sm-10">
+                      <input type="hidden" class="form-control" name="sdate" value="{{ data.sdate }}"  required>
+                    </div>
+					<div class="col-sm-10">
+                      <input type="hidden" class="form-control" name="ddate" value="{{ data.ddate }}"  required>
+                    </div>
+						<div class="col-sm-10">
+                      <input type="hidden" class="form-control" name="realmark" value="{{ data.amark }}"  required>
+                    </div>
+				
+			
+ {% endfor %}
+  </form>
+</div>
+		</div>
+      </div>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='subject/jquery.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap-select.min.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap.min.js')}}"></script>
+  
+</body>
+</html>	
+				{% endblock %}

@@ -1,0 +1,162 @@
+<head>
+        <title>Professor Profile Page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    </head>
+{% extends "TeacherAdmin/layout1.html" %}
+{% block body %}
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+		{% include "message.html" %}
+		     <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fas fa-user"></i>Profile</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/teachersignup">Home</a></li>
+              <li><i class="fas fa-user"></i>Profile</li>
+              
+            </ol>
+          </div>
+        </div>
+		<div class="container">
+{% include "message.html" %}
+   <style>
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+table {
+  border-spacing: 15px;
+}
+</style> 
+	
+      <hr>
+        <div class="content-section">
+        <form method="POST" action="/register">
+		{{ form.csrf_token() }}
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                 <table style="width:100%">
+				<tr>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.name.label(class="form-control-label required") }}</b>
+						
+						{{ session.name }}
+                    
+					</div>
+                </td>
+		         
+				<td>
+				<div class="form-group">
+                    <b>{{ form.email.label(class="form-control-label required") }}</b>
+							{{ session.email }}
+                </div></td>
+				
+				<td>
+                <div class="form-group">
+                   <b> {{ form.Tid.label(class="form-control-label required") }}</b>
+
+                    {{ session.Tid }}
+					</div>
+                </td>
+				</tr>
+				
+				<tr>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.Gender.label(class ="form-control-label required") }}</b>
+
+                    {{ session.Gender }}
+					
+					</div>
+                </td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.birth.label(class ="form-control-label required") }}</b>
+
+                    {{ session.birth }}
+					</div>
+                </td>
+				<td>
+                <div class="form-group">
+                   <b> {{ form.contact.label(class ="form-control-label required") }}</b>
+
+                    {{ session.contact }}
+					
+					</div>
+                </td>
+				</tr>
+				
+				
+						<tr>
+				<td>
+                <div class="form-group">
+                   <b> {{ form.department.label(class ="form-control-label required") }}</b>
+
+                    {{ session.department }}
+					
+					</div>
+                </td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.qualifications.label(class ="form-control-label required") }}</b>
+
+                    {{ session.qualifications }}
+					
+					</div>
+                </td>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.designation.label(class ="form-control-label required") }}</b>
+
+					{{ session.designation }}
+					
+					</div>
+                </td>
+				</tr>
+				     
+				<tr>
+				<td>
+				<div class="form-group">
+                    <b>{{ form.Address.label(class ="form-control-label required") }}</b>
+
+                    {{ session.Address }}
+					
+					</div>
+				
+				</td>
+				<td></td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.pincode.label(class ="form-control-label required") }}</b>
+
+                    {{ session.pincode }}
+					
+					</div>
+                </td>
+				</tr>
+				
+			
+				</table>
+            </fieldset>
+			
+		  <div  class="form-group">
+		 
+  <a href="/teacherprofile/teacher_edit_profile" ><input type="button" class="btn btn-success" value="Edit Profile"></a>
+
+            </div> 
+            
+		
+        </form></div>
+		    
+    </div>
+  
+	</div>
+		</div>
+
+
+
+
+				{% endblock %}

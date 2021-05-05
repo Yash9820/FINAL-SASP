@@ -1,0 +1,296 @@
+<head>
+        <title>Add New Student</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+  
+	</head>
+{% extends "ADMIN/layout1.html" %}
+{% block body %}
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+               {% include "message.html" %}
+		     <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fas fa-user"></i>Profile</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/admindash">Home</a></li>
+              
+			  <li><i class="fas fa-address-card"></i>Add New Students</li>
+              
+            </ol>
+          </div>
+        </div>
+		<div class="container">
+
+    <style>
+table, th, td {
+  
+  padding: 5px;
+}
+table {
+  border-spacing: 15px;
+}
+</style>
+	
+      <hr>
+        <div class="content-section">
+        <form method="POST" action="/addnewstudent">
+		{{ form.csrf_token() }}
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <table style="width:100%;">
+				<tr>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.name.label(class="form-control-label required") }}</b>
+
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control-lg",placeholder=" Enter Your Fullname") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+		         
+				<td>
+				<div class="form-group">
+                    <b>{{ form.email.label(class="form-control-label required") }}</b>
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+    
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg",placeholder=" Enter Your Email") }}
+                    {% endif %}
+                </div></td>
+				
+				<td>
+                <div class="form-group">
+                   <b> {{ form.Enrollment.label(class="form-control-label required") }}</b>
+
+                    {% if form.Enrollment.errors %}
+                        {{ form.Enrollment(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Enrollment.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.Enrollment(class="form-control form-control-lg",placeholder=" Enter Your Enrollment") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				</tr>
+				
+				<tr>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.Gender.label(class ="form-control-label required") }}</b>
+
+                    {% if form.Gender.errors %}
+                        {{ form.Gender(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Gender.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.Gender(class="ui-content") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.birth.label(class ="form-control-label required") }}</b>
+
+                    {% if form.birth.errors %}
+                        {{ form.birth(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.birth.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.birth(class="form-control form-control-lg") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				<td>
+                <div class="form-group">
+                   <b> {{ form.contact.label(class ="form-control-label required") }}</b>
+
+                    {% if form.contact.errors %}
+                        {{ form.contact(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.contact.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.contact(class="form-control form-control-lg",placeholder=" Enter Your Contact Number") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				</tr>
+				
+				
+						<tr>
+				<td>
+                <div class="form-group">
+                   <b> {{ form.semester.label(class ="form-control-label required") }}</b>
+
+                    {% if form.semester.errors %}
+                        {{ form.semester(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.semester.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.semester(class="form-control form-control-lg") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.city.label(class ="form-control-label required") }}</b>
+
+                    {% if form.city.errors %}
+                        {{ form.city(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.city.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.city(class="form-control form-control-lg") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.state.label(class ="form-control-label required") }}</b>
+
+                    {% if form.state.errors %}
+                        {{ form.state(value=employee.state,class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.state.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.state(class="form-control form-control-lg") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				</tr>
+				     
+				<tr>
+				<td>
+				<div class="form-group">
+                    <b>{{ form.Address.label(class ="form-control-label required") }}</b>
+
+                    {% if form.Address.errors %}
+                        {{ form.Address(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Address.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.Address(class="form-control form-control-lg",placeholder=" Enter Your Address") }}
+                    {% endif %}
+					
+					</div>
+				
+				</td>
+				<td></td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.pincode.label(class ="form-control-label required") }}</b>
+
+                    {% if form.pincode.errors %}
+                        {{ form.pincode(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.pincode.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.pincode(class="form-control form-control-lg",placeholder=" Enter Your Pincode") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				</tr>
+<tr><td>
+                <div class="form-group">
+                    <b>{{ form.password.label(class="form-control-label required") }}</b>
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg",placeholder=" Enter Your Password") }}
+                    {% endif %}
+                </div>
+				</td>
+				<td></td>
+				<td>
+                <div class="form-group">
+                   <b> {{ form.confirm_password.label(class="form-control-label required") }}</b>
+                    {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.confirm_password(class="form-control form-control-lg",placeholder="Enter Your Confirm Password") }}
+                    {% endif %}
+                </div></td></tr>
+				
+				
+		
+				</table>
+            </fieldset>
+		
+            <div  class="form-group">
+                {{ form.submit(class="btn btn-success") }}
+				
+				
+            </div>  	
+		
+        </form></div>
+		    
+    </div>
+  
+	</div>
+		</div>
+
+
+
+
+				{% endblock %}

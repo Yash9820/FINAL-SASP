@@ -1,0 +1,112 @@
+<head>
+        <title>Assignment Details</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+        
+	<style>
+#table1 {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table1 td, #table1 th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#table1 tr:nth-child(even){background-color: #f2f2f2;}
+
+#table1 tr:hover {background-color: #ddd;}
+
+#table1 th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #000000;
+  color: white;
+}
+.btn {
+  background-color: Black;
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: RoyalBlack;
+}
+div.b {
+  position: absolute;
+  right: 300;
+  width: 300px;
+  height: 220px;
+  border: 6px solid black;
+}
+
+
+</style
+	</head>
+{% extends "TeacherAdmin/layout1.html" %}
+{% block body %}
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+		{% include "message.html" %}
+		     <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fa fa fa-address-card"></i>Show Your Assignment</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/stsignup">Home</a></li>
+              <li><i class="fa fa-address-card"></i><a href="/showassignment">Show Your Assignment</a></li>
+			  <li><i class="fa fa-address-card"></i>Subject Wise Assignment</li>
+              
+            </ol>
+          </div>
+        </div>
+			<div class="container">
+					<form class="form-validate form-horizontal" action="/uploadans" enctype="multipart/form-data" method="POST" id="feedback_form"  role="form">
+			{% for data in showstsb %}
+	{% if data.Tid==session.Tid %}
+  <h2>{{ data.stitle }}</h2>
+  <h4>{{ data.name }}. &nbsp;&nbsp; Assignment Posting Date:-{{ data.sdate }}</h4>
+  <h4 align="right"> Due date:-	{{ data.ddate}} </h4>
+  <h4>  Assignment Mark:- {{ data.amark }} </h4>
+   <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+   <div>
+   <label><h3>Assignment File</h3></label>
+   <br>
+ <a class="btn" href="{{ url_for('down',file=data.file )}}" download>
+     <span>{{ data.file.rsplit('.',1)[0] }} | </span>&nbsp;<i class="fa fa-download"></i>
+ </a>
+
+ </div>
+
+
+			
+  
+ 
+				 
+				  <div ><h4> ASSIGNMENT DESCRIPTION:-{{ data.adescription }} </h4></div>
+
+		  
+                    
+		{% endif %}	
+ {% endfor %}
+  </form>
+</div>
+		</div>
+      </div>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='subject/jquery.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap-select.min.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap.min.js')}}"></script>
+  
+</body>
+</html>	
+				{% endblock %}

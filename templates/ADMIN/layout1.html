@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+	<style>
+.wrapper .sidebar{
+  
+  width: 220px;
+  height: 100%;
+  background: #000000;
+  padding: 30px 0px;
+  position: fixed;
+}
+
+.wrapper .main_content .header{
+  padding: 20px;
+  background: #000000;
+  color: #ffffff;
+  border-bottom: 1px solid #e0e4e8;
+}
+</style>
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar">
+        <h2>Admin</h2>
+        <ul>
+            <li><a href="/admindash"><i class="fas fa-home"></i>Home</a></li>
+            <!--<li><a href="#"><i class="fas fa-user"></i>Profile</a></li>-->
+			<li><a href="/Addsubject"><i class="fas fa-plus-square"></i>Add New Subject</a></li>
+            <li><a href="/showstudent"><i class="fas fa-address-card"></i>Show All Student Details</a></li>
+			<li><a href="/showprofessor"><i class="fas fa-address-card"></i>Show All Professor Details</a></li>
+            <li><a href="/addnewstudent"><i class="fas fa fa-user-plus"></i>Add New Student</a></li>
+            <li><a href="/addnewprofessor"><i class="fas fa fa-user-secret"></i>Add New Professor</a></li>
+            <li><a href="/authorizestudent"><i class="fa fa-unlock"></i>Student Authorization</a></li>
+            <li><a href="/authorizeteacher"><i class="fa fa-unlock"></i>Professor Authorization</a></li>
+			<li><a href="/logout1"><i class="fas fa-power-off"></i>Logout</a></li>
+        </ul> 
+		
+    </div>
+		
+		{% block body %} {% endblock %}
+		
+	

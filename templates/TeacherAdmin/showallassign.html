@@ -1,0 +1,105 @@
+<head>
+        <title>All Assignments</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    <style>
+#table1 {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table1 td, #table1 th {
+  border: 1px solid #ddd;
+  padding: 16px;
+}
+
+#table1 tr:nth-child(even){background-color: #f2f2f2;}
+
+#table1 tr:hover {background-color: #ddd;}
+
+#table1 th {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: left;
+  background-color: #000000;
+  color: white;
+}
+
+</style
+	</head>
+{% extends "TeacherAdmin/layout1.html" %}
+{% block body %}
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+		{% include "message.html" %}
+		     <div class="row">
+          <div class="col-lg-12">
+            <h3 class="page-header"><i class="fa fa fa-address-card"></i>Assignments</h3>
+            <ol class="breadcrumb">
+              <li><i class="fa fa-home"></i><a href="/teachersignup">Home</a></li>
+              <li><i class="fa fa-address-card"></i><a href="/showsubjectwiseassignmentbytecher">Assignments</a></li>
+			  <li><i class="fa fa-book"></i>All Assignments</li>
+              
+            </ol>
+          </div>
+        </div>
+			<div >
+  <h2>Show All Assignment</h2>
+  
+  <table style="width:100%" id="table1">
+    <thead class="thead-dark">
+      <tr>
+        <th>Sr No</th>
+		<th>Professor Department</th>
+		<th>Professor Id</th>
+		<th>Assignment Title</th>
+         <th>Subject Name</th>
+		 <th>For Semester</th>
+		 <th>Assignment File</th>
+		 <th>Assignment Start-Date</th>
+		 <th>Assignment Due-Date</th>
+		<th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+     {% for data in showst %}
+	 {% if session.Tid==data.Tid %}
+      <tr>
+        <td>{{loop.index}}</td>
+		<td>{{data.pdpart}}</td>
+		<td>{{data.Tid}}</td>
+        <td>{{data.stitle}}</td>
+		<td>{{data.sname}}</td>
+		<td>{{data.sem}}</td>
+		<td>{{data.file}}</td>
+		<td>{{data.sdate}}</td>
+		<td>{{data.ddate}}</td>
+        
+		
+		  <td width="150">
+				<a href="/viewassignmentbyprofessor/{{data.id}}" class="btn btn-info">View Assignments</a>
+			
+              <a href="/editassign/{{data.id}}" class="btn btn-success">Edit Assignments</a>
+			  <a href="/deleteassign/{{data.id}}" class="btn btn-danger">Delete Assignments</a>
+            </td>
+      </tr>
+	  {% endif %}
+     {% endfor %}
+
+    </tbody>
+  </table>
+  
+</div>
+		</div>
+      </div>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='subject/jquery.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap-select.min.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap.min.js')}}"></script>
+
+</body>
+</html>	
+				{% endblock %}

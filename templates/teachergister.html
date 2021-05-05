@@ -1,0 +1,379 @@
+{% extends "layout.html" %}
+{% block body %}
+<style>
+
+body {
+  background: #fafafa;
+  color: #333333;
+  margin-top: 5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
+
+.bg-steel {
+  background-color: #5f788a;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+
+.article-title {
+  color: #444444;
+}
+
+a.article-title:hover {
+  color: #428bca;
+  text-decoration: none;
+}
+
+.article-content {
+  white-space: pre-line;
+}
+
+.article-img {
+  height: 65px;
+  width: 65px;
+  margin-right: 16px;
+}
+
+.article-metadata {
+  padding-bottom: 1px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e3e3e3
+}
+
+.article-metadata a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+.article-svg {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+}
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+
+.account-heading {
+  font-size: 2.5rem;
+}
+
+</style>
+<style>
+  .required:after {
+    content:" *";
+    color: red;
+  }
+ table, th, td {
+  
+  padding: 5px;
+}
+table {
+  border-spacing: 15px;
+}
+
+</style>
+
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="container">
+{% include "message.html" %}
+    <div >
+	<div class="content-section">
+	<center><h2>Professor Register Form</h2>
+      
+	  <legend class="border-bottom mb-4">Please fill in this form to create an account.</legend></center></div>
+      <hr>
+        <div class="content-section">
+        <form method="POST" action="/teacheregister">
+		{{ form.csrf_token() }}
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <table style="width:100%">
+				<tr>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.name.label(class="form-control-label required") }}</b>
+
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control-lg",placeholder=" Enter Your Fullname") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+		         
+				<td>
+				<div class="form-group">
+                    <b>{{ form.email.label(class="form-control-label required") }}</b>
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+    
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg",placeholder=" Enter Your Email") }}
+                    {% endif %}
+                </div></td>
+				
+				<td>
+                <div class="form-group">
+                   <b> {{ form.Tid.label(class="form-control-label required") }}</b>
+
+                    {% if form.Tid.errors %}
+                        {{ form.Tid(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Tid.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.Tid(class="form-control form-control-lg",placeholder=" Enter Your Teacher Id") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				</tr>
+				
+				<tr>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.Gender.label(class ="form-control-label required") }}</b>
+
+                    {% if form.Gender.errors %}
+                        {{ form.Gender(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Gender.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.Gender(class="ui-content") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.birth.label(class ="form-control-label required") }}</b>
+
+                    {% if form.birth.errors %}
+                        {{ form.birth(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.birth.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.birth(class="form-control form-control-lg") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				<td>
+                <div class="form-group">
+                   <b> {{ form.contact.label(class ="form-control-label required") }}</b>
+
+                    {% if form.contact.errors %}
+                        {{ form.contact(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.contact.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.contact(class="form-control form-control-lg",placeholder=" Enter Your Contact Number") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				</tr>
+				
+				
+						<tr>
+				<td>
+                <div class="form-group">
+                   <b> {{ form.department.label(class ="form-control-label required") }}</b>
+
+                    {% if form.department.errors %}
+                        {{ form.department(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.department.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.department(class="form-control form-control-lg") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.qualifications.label(class ="form-control-label required") }}</b>
+
+                    {% if form.qualifications.errors %}
+                        {{ form.qualifications(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.qualifications.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.qualifications(class="form-control form-control-lg") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				<td>
+                <div class="form-group">
+                    <b>{{ form.designation.label(class ="form-control-label required") }}</b>
+
+                    {% if form.designation.errors %}
+                        {{ form.designation(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.designation.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.designation(class="form-control form-control-lg") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				</tr>
+				     
+				<tr>
+				<td>
+				<div class="form-group">
+                    <b>{{ form.Address.label(class ="form-control-label required") }}</b>
+
+                    {% if form.Address.errors %}
+                        {{ form.Address(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.Address.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.Address(class="form-control form-control-lg",placeholder=" Enter Your Address") }}
+                    {% endif %}
+					
+					</div>
+				
+				</td>
+				<td></td>
+						<td>
+                <div class="form-group">
+                    <b>{{ form.pincode.label(class ="form-control-label required") }}</b>
+
+                    {% if form.pincode.errors %}
+                        {{ form.pincode(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.pincode.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                       {{ form.pincode(class="form-control form-control-lg",placeholder=" Enter Your Pincode") }}
+                    {% endif %}
+					
+					</div>
+                </td>
+				</tr>
+				
+				
+				<tr><td>
+                <div class="form-group">
+                    <b>{{ form.password.label(class="form-control-label required") }}</b>
+                    {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg",placeholder=" Enter Your Password") }}
+                    {% endif %}
+                </div>
+				</td>
+				<td></td>
+				<td>
+                <div class="form-group">
+                   <b> {{ form.confirm_password.label(class="form-control-label required") }}</b>
+                    {% if form.confirm_password.errors %}
+                        {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.confirm_password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.confirm_password(class="form-control form-control-lg",placeholder="Enter Your Confirm Password") }}
+                    {% endif %}
+                </div>
+				   <div class="form-group">
+                        <input type="hidden" name ="authorization" value="0">
+                    </div>
+				</td></tr>
+				</table>
+            </fieldset>
+		
+            <div  class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<big class="text-muted">
+            Already Have An Account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
+        </big>
+            </div>  	
+		
+        </form></div>
+		    
+    </div>
+  
+	</div>
+{% endblock %}

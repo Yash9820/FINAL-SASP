@@ -1,0 +1,112 @@
+<head>
+        <title>Status Of Assignments</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    <style>
+#table1 {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table1 td, #table1 th {
+  border: 1px solid #ddd;
+  padding: 13px;
+}
+
+#table1 tr:nth-child(even){background-color: #f2f2f2;}
+
+#table1 tr:hover {background-color: #ddd;}
+
+#table1 th {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: left;
+  background-color: #000000;
+  color: white;
+}
+.white-box { width: 100%; height: 100%; margin-top: 5px; margin-left: left; margin-right: auto;   
+  
+background: rgba(255,255,255,0.9);
+padding: px;
+-webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+-moz-box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+-ms-border-radius: 5px;
+-o-border-radius: 5px;
+border-radius: 5px;
+}
+
+</style>
+
+	</head>
+{% extends "ADMIN/layout1.html" %}
+{% block body %}
+<div class="main_content">
+        <div class="header">Welcome!!   {{session.email}}.</div>  
+        <div class="info">
+		     
+
+            <h3 class="page-header"><i class="fa fa fa-address-card"></i>Details Of Professor</h3>
+
+          
+       
+	<div class="">
+        <table id="example" class="table table-striped table-bordered" >
+     <thead>
+          <tr>
+            <td>ID</td>
+            <td>Fullname</td>
+            <td>Email</td>
+			<td>Teacher-Id</td>
+			<td>Gender</td>
+			<td>Birth Date</td>
+            <td>Phone</td>
+			<td>Department</td>
+			<td>Qualifications</td>
+			<td>Designation</td>
+			<td>Authorization</td>
+            <td>Action</td>
+          </tr>
+        </thead>
+     <tbody>
+          {% for data in employee %}
+          <tr>
+			<td>{{loop.index}}</td>
+            <td>{{data.name}}</td>
+            <td>{{data.email}}</td>
+			<td>{{data.Tid}}</td>
+			<td>{{data.Gender}}</td>
+			<td>{{data.birth}}</td>
+            <td>{{data.contact}}</td>
+			<td>{{data.department}}</td>
+			<td>{{data.qualifications}}</td>
+			<td>{{data.designation}}</td>
+			{% if data.authorization == 0 %}
+				<td style="color:red;">Non-Authorized</td>
+			{% else %}
+				<td style="color:Green;">Authorized</td>
+			{% endif %}
+
+            <td width="150">
+              <a href="/authorizationforprofessor/{{data.id}}" class="btn btn-success">Change Status</a>
+              
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+		</div>
+      </div>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='subject/jquery.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap-select.min.js')}}"></script>
+  <script src="{{ url_for('static',filename='subject/bootstrap.min.js')}}"></script>
+
+</body>
+</html>	
+				{% endblock %}

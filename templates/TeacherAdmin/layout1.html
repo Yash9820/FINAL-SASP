@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Side Navigation Bar</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+	
+	<style>
+.wrapper .sidebar{
+  width: 200px;
+  height: 100%;
+  background: #000000;
+  padding: 30px 0px;
+  position: fixed;
+}
+
+.wrapper .main_content .header{
+  padding: 20px;
+  background: #000000;
+  color: #ffffff;
+  border-bottom: 1px solid #e0e4e8;
+}
+.wrapper .sidebar h5{
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+}
+</style>
+	<script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="sidebar">
+       <h5>{{ session.name }}</h5>
+		<h5>Professor Id:- {{ session.Tid }} </h5>
+		
+        <ul>
+		{% if session.authorization==1 %}
+            <li><a href="/teachersignup"><i class="fas fa-home"></i>Home</a></li>
+            <li><a href="/teacherprofile"><i class="fas fa-user"></i>Profile</a></li>
+			<li><a href="/showsubjectdetail"><i class="fas fa-map-pin"></i>Subject Details</a></li>
+			<li><a href="/createassignment"><i class="fas fa-plus-square"></i>Create A Assignment</a></li>
+            <li><a href="/showsubjectwiseassignmentbytecher"><i class="fas fa-address-card"></i>Show All Assignments</a></li>
+            <li><a href="/showsubjectassignmentbytecher"><i class="fas fa-blog"></i>Grade Assignment</a></li>
+            <!--<li><a href="#"><i class="fas fa-blog"></i>Blogs</a></li>
+            <li><a href="#"><i class="fas fa-address-book"></i>Contact</a></li>
+            <li><a href="#"><i class="fas fa-map-pin"></i>Map</a></li>-->
+			<li><a href="logout2"><i class="fas fa-power-off"></i>Logout</a></li>
+			{% else %}
+			             <li><a href=""><i ></i>You Are Non-Authorized</a></li>
+						 <li><a href="logout2"><i class="fas fa-power-off"></i>Logout</a></li>
+			{% endif %}
+        </ul> 
+		
+    </div>
+		
+		{% block body %} {% endblock %}
+		
+	
