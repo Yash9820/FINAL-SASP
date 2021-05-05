@@ -1327,6 +1327,12 @@ def logout15():
 	session.clear()
 	return redirect(url_for('teacherlogin'))
 
+@app.errorhandler(413)
+def largefile_error(e):
+    flash("Large file",'danger')
+    return redirect(url_for("uploadans")), 413
+
+
 @application.errorhandler(413)
 def too_large(e):
 	flash('Maximum File Size is 10MB','danger')
