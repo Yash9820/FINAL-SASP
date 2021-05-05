@@ -1,30 +1,22 @@
 from flask import Flask, render_template,request,flash,session,url_for,redirect,session,jsonify,g,send_file,send_from_directory
 from flask_sqlalchemy import SQLAlchemy
-from passlib.hash import sha256_crypt
 from forms import RegistrationForm,LoginForm,TeacherRegistrationForm,EditProfileForm,EditTeacherProfile,RequestResetForm, ResetPasswordForm,ChangePasswordForm,StudentRegistrationForm,AdminTeacherRegistrationForm
 from flask_mail import Mail,Message
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
-import json
 from flask_mysqldb import MySQL
 import MySQLdb.cursors 
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager,logout_user,login_user, current_user, logout_user, login_required
-from datetime import datetime, date
+from datetime import datetime, date	
 
 from werkzeug.utils import secure_filename
 import urllib.request
 import os
-from io import BytesIO
-
 import uuid
 import urllib.parse
 
-with open('config.json', 'r') as c:
-    params = json.load(c)["params"]
-
-app = Flask(__name__)
-app.config.update(
+application = Flask(__name__)
+application.config.update(
     MAIL_SERVER = 'smtp.gmail.com',
     MAIL_PORT = '465',
     MAIL_USE_SSL = True,
@@ -32,20 +24,20 @@ app.config.update(
     MAIL_USERNAME = 'studentassignmentportal12@gmail.com',
     MAIL_PASSWORD=  '181267174'
 )
-mail = Mail(app)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:@localhost/student'.format(user='root', password='', server='localhost', database='student')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'student'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-mysql = MySQL(app) 
-db = SQLAlchemy(app)
-bcrypt=Bcrypt(app)
-login_manager=LoginManager(app)
+mail = Mail(application)
+application.config["SQLALCHEMY_DATABASE_URI"] = 'mysql+mysqlconnector://root:@localhost/student'.format(user='root', password='', server='localhost', database='student')
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+application.config['MYSQL_HOST'] = 'localhost'
+application.config['MYSQL_USER'] = 'root'
+application.config['MYSQL_PASSWORD'] = ''
+application.config['MYSQL_DB'] = 'student'
+application.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+mysql = MySQL(application) 
+db = SQLAlchemy(application)
+bcrypt=Bcrypt(application)
+login_manager=LoginManager(application)
 
-@app.before_request
+@application.before_request
 def before_request():
 	g.email=None
 	if 'email'  in session:
@@ -91,11 +83,11 @@ class Subjectdetail(db.Model):
 	email = db.Column(db.String(80),	unique=True,	primary_key=True,	nullable=False)
 	Tid = db.Column(db.String(11), 	unique=True,	primary_key=True,	nullable=False)
 
-@app.route("/")
+@application.route("/")
 def home():
     return render_template('index.html')
 
-@app.route("/register", methods=['GET', 'POST'])
+@application.route("/register", methods=['GET', 'POST'])
 def register():
 	form = RegistrationForm(request.form)
 	if request.method=='POST' and form.validate_on_submit():
@@ -134,7 +126,7 @@ def register():
 			return redirect(url_for('register'))
 	return render_template('register.html', title='Register', form=form)
 
-@app.route("/login", methods=['GET', 'POST'])
+@application.route("/login", methods=['GET', 'POST'])
 def login():
 	form = LoginForm(request.form)
 	if g.email:
@@ -173,7 +165,7 @@ def login():
 			flash('Login Unsuccessful. Please check email and password', 'danger')
 	return render_template('login.html', title='Login', form=form)
 
-@app.route("/stsignup")
+@application.route("/stsignup")
 def stsignup():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -184,7 +176,7 @@ def stsignup():
 		return render_template('/StudentLogin/index.html',email=session['email'],name=session['name'],Enrollment=session['Enrollment'],Gender=session['Gender'],birth=session['birth'],contact=session['contact'],semester=session['semester'],city=['city'],state=session['state'],Address=session['Address'],pincode=session['pincode'],authorization=session['authorization'],showannounce=data)
 	return redirect(url_for('login'))
 
-@app.route('/studentprofile/edit_profile', methods=['GET', 'POST'])
+@application.route('/studentprofile/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
 	if g.email:
 		form = EditProfileForm(request.form)
@@ -217,7 +209,7 @@ def edit_profile():
 		return render_template('/StudentLogin/edit_profile.html', title='Edit Profile',form=form)
 	return redirect(url_for('login'))
 
-@app.route('/teacherprofile/teacher_edit_profile', methods=['GET', 'POST'])
+@application.route('/teacherprofile/teacher_edit_profile', methods=['GET', 'POST'])
 def teacher_edit_profile():
 	if g.email:
 		form = EditTeacherProfile(request.form)
@@ -248,7 +240,7 @@ def teacher_edit_profile():
 	return redirect(url_for('teacherlogin'))
 
 
-@app.route("/logout3")
+@application.route("/logout3")
 def logout3():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -259,7 +251,7 @@ def logout3():
 
 
 
-@app.route("/teacherlogin", methods=['GET', 'POST'])
+@application.route("/teacherlogin", methods=['GET', 'POST'])
 def teacherlogin():
 	form = LoginForm(request.form)
 	if g.email:
@@ -298,7 +290,7 @@ def teacherlogin():
 			flash('Login Unsuccessful. Please check email and password', 'danger')
 	return render_template('teacherlogin.html', title='Login', form=form)
 	
-@app.route("/teachersignup")
+@application.route("/teachersignup")
 def teachersignup():
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -307,14 +299,14 @@ def teachersignup():
 		return render_template('/TeacherAdmin/index.html',email=session['email'],name=session['name'],Tid=session['Tid'],Gender=session['Gender'],birth=session['birth'],contact=session['contact'],department=session['department'],qualifications=session['qualifications'],designation=session['designation'],Address=session['Address'],pincode=session['pincode'],carbrands=carbrands)
 	return redirect(url_for('teacherlogin'))
 
-@app.route("/logout2")
+@application.route("/logout2")
 def logout2():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('teacherlogin'))
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
 	logout_user()
 	session.pop('loggedin', None)
@@ -324,13 +316,13 @@ def logout():
 	return redirect(url_for('login'))
 
 
-@app.route("/contact")
+@application.route("/contact")
 def contact():
     return render_template('contact.html')
 
 
 
-@app.route("/adminlogin",methods =['GET', 'POST'])
+@application.route("/adminlogin",methods =['GET', 'POST'])
 def adminlogin():
 	if g.email:
 		return redirect(url_for('admindash'))
@@ -352,7 +344,7 @@ def adminlogin():
 			flash('Login Unsuccessful. Please check username and password', 'danger')
 	return render_template('adminlogin.html',title='Login', form=form)
 
-@app.route("/admindash")
+@application.route("/admindash")
 def admindash():
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -366,14 +358,14 @@ def admindash():
 
 
 
-@app.route('/logout1')
+@application.route('/logout1')
 def logout1():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('adminlogin'))
 	
-@app.route("/teacheregister",methods =['GET', 'POST'])
+@application.route("/teacheregister",methods =['GET', 'POST'])
 def teacheregister():
 	form = TeacherRegistrationForm(request.form)
 	if request.method=='POST' and form.validate_on_submit():
@@ -414,12 +406,12 @@ def teacheregister():
 
 
 
-@app.route("/about")
+@application.route("/about")
 def about():
     return render_template('about.html')
 
 
-@app.route('/Addsubject',methods=["POST","GET"])
+@application.route('/Addsubject',methods=["POST","GET"])
 def Addsubject():
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -442,7 +434,7 @@ def Addsubject():
 		return render_template('/ADMIN/blank.html',carbrands=carbrands)
 	return redirect(url_for('adminlogin'))		
  
-@app.route("/carbrand",methods=["POST","GET"])
+@application.route("/carbrand",methods=["POST","GET"])
 def carbrand():  
     cursor = mysql.connection.cursor()
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -460,21 +452,21 @@ def carbrand():
             OutputArray.append(outputObj)
     return jsonify(OutputArray)
 
-@app.route("/studentprofile", methods=['GET', 'POST'])
+@application.route("/studentprofile", methods=['GET', 'POST'])
 def studentprofile():
 	if g.email:
 		form = RegistrationForm(request.form)
 		return render_template('/StudentLogin/profile.html', title='Register', form=form)
 	return redirect(url_for('login'))
 
-@app.route("/teacherprofile", methods=['GET', 'POST'])
+@application.route("/teacherprofile", methods=['GET', 'POST'])
 def teacherprofile():
 	if g.email:
 		form = TeacherRegistrationForm(request.form)
 		return render_template('/TeacherAdmin/tprofile.html', title='Register', form=form)
 	return redirect(url_for('teacherlogin'))
 
-@app.route('/createassignment',methods=["POST","GET"])
+@application.route('/createassignment',methods=["POST","GET"])
 def createassignment():
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -483,7 +475,7 @@ def createassignment():
 		return render_template('/TeacherAdmin/CreateAssignment.html',carbrands=carbrands)
 	return redirect(url_for('teacherlogin'))
 
-@app.route("/crassignment",methods=["POST","GET"])
+@application.route("/crassignment",methods=["POST","GET"])
 def crassignment():  
     cursor = mysql.connection.cursor()
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -503,7 +495,7 @@ def crassignment():
             OutputArray.append(outputObj)
     return jsonify(OutputArray)
 
-@app.route("/crassignment1",methods=["POST","GET"])
+@application.route("/crassignment1",methods=["POST","GET"])
 def crassignments():  
     cursor = mysql.connection.cursor()
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -523,7 +515,7 @@ def crassignments():
             OutputArray.append(outputObj)
     return jsonify(OutputArray)
 
-@app.route('/showstudent')
+@application.route('/showstudent')
 def showstudent():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -534,7 +526,7 @@ def showstudent():
 		return render_template('/ADMIN/showstudent.html', employee = data)
 	return redirect(url_for('adminlogin'))
 
-@app.route('/edit/<id>', methods = ['POST', 'GET'])
+@application.route('/edit/<id>', methods = ['POST', 'GET'])
 def get_employee(id):
 	form = EditProfileForm(request.form)
 	cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -544,7 +536,7 @@ def get_employee(id):
 	print(data[0])
 	return render_template('/ADMIN/edit_student.html', employee = data[0],form=form)
  
-@app.route('/update/<id>', methods=['POST'])
+@application.route('/update/<id>', methods=['POST'])
 def update_employee(id):
 	if request.method == 'POST':
 		name = request.form['name']
@@ -568,7 +560,7 @@ def update_employee(id):
 		
 		return redirect(url_for('showstudent'))
  
-@app.route('/delete/<string:id>', methods = ['POST','GET'])
+@application.route('/delete/<string:id>', methods = ['POST','GET'])
 def delete_employee(id):
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cur.execute('DELETE FROM register WHERE id = {0}'.format(id))
@@ -576,8 +568,8 @@ def delete_employee(id):
     return redirect(url_for('showstudent'))
 
 UPLOAD_FOLDER = './static/upassig/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
+application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+application.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'doc','docx'])
 
@@ -599,7 +591,7 @@ class Crassignment(db.Model):
 	adescription = db.Column(db.String(200), nullable=False)
 	data=db.Column(db.LargeBinary)
 
-@app.route('/crassign',methods=['POST'])
+@application.route('/crassign',methods=['POST'])
 def crassign():
 	if g.email:
 		if request.method=='POST':
@@ -618,7 +610,7 @@ def crassign():
 			sem = request.form.get('sem')
 			adescription = request.form.get('adescription')
 			if file and allowed_file(file.filename):
-				file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file))
+				file.save(os.path.join(application.config['UPLOAD_FOLDER'], new_file))
 				newassign=Crassignment(stitle=stitle,Tid=Tid,pdpart=pdpart,sem=sem,sname=sname,name=name,email=email,file=new_file,sdate=sdate,ddate=ddate,adescription=adescription,amark=amark,data=file.read())
 				db.session.add(newassign)
 				db.session.commit()
@@ -641,7 +633,7 @@ def crassign():
 		return redirect(url_for('createassignment'))
 	return redirect(url_for('teacherlogin'))
 
-@app.route("/showassignment", methods=['GET', 'POST'])
+@application.route("/showassignment", methods=['GET', 'POST'])
 def showassignment():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -654,7 +646,7 @@ def showassignment():
 
 
 
-@app.route('/view/<string:sname>', methods = ['POST','GET'])
+@application.route('/view/<string:sname>', methods = ['POST','GET'])
 def viewassignment(sname):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -664,7 +656,7 @@ def viewassignment(sname):
 		return render_template('/StudentLogin/showassignsubject.html',showstsb = data,datetime = date.today())
 	return redirect(url_for('login'))
 
-@app.route('/viewassignmentsb/<string:id>', methods = ['POST','GET'])
+@application.route('/viewassignmentsb/<string:id>', methods = ['POST','GET'])
 def viewassignmentsb(id):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -678,7 +670,7 @@ def viewassignmentsb(id):
 		return render_template('/StudentLogin/viewfullassign.html',showstsb = data, showans=result,datetime = date.today())
 	return redirect(url_for('login'))
 
-@app.route('/down/<file>', methods = ['GET'])
+@application.route('/down/<file>', methods = ['GET'])
 def down(file):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -691,7 +683,7 @@ def down(file):
 	return redirect(url_for('login'))
 
 UPLOAD_FOLDERR = 'static/uploadanswer/'
-app.config['UPLOAD_FOLDERR'] = UPLOAD_FOLDERR
+application.config['UPLOAD_FOLDERR'] = UPLOAD_FOLDERR
 
 class Uploadassign(db.Model):
 	Enrollment = db.Column(db.String(11), 	unique=True,	primary_key=True,	nullable=False)
@@ -710,7 +702,7 @@ class Uploadassign(db.Model):
 	email = db.Column(db.String(80),	unique=True,	primary_key=True,	nullable=False)
 	file = db.Column(db.String(150))
 
-@app.route('/uploadans', methods=['GET','POST'])
+@application.route('/uploadans', methods=['GET','POST'])
 def uploadans():
 	if g.email:
 		if request.method=='POST':
@@ -735,7 +727,7 @@ def uploadans():
 			filename=secure_filename(file.filename)
 			new_file = str(urllib.parse.quote(filename))
 			if file and allowed_file(file.filename):
-				file.save(os.path.join(app.config['UPLOAD_FOLDERR'], new_file))
+				file.save(os.path.join(application.config['UPLOAD_FOLDERR'], new_file))
 				cursor = mysql.connection.cursor()
 				cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 				result=cur.execute('SELECT * FROM uploadassign WHERE asid=%s AND Enrollment=%s',(id,Enrollment,))
@@ -745,9 +737,9 @@ def uploadans():
 					enroll=data['Enrollment']
 					print(assid)
 					print(enroll)
-					os.remove(os.path.join(app.config['UPLOAD_FOLDERR'], data['file']))
+					os.remove(os.path.join(application.config['UPLOAD_FOLDERR'], data['file']))
 					if assid and enroll :
-						file.save(os.path.join(app.config['UPLOAD_FOLDERR'], new_file))
+						file.save(os.path.join(application.config['UPLOAD_FOLDERR'], new_file))
 						cur.execute("""UPDATE uploadassign SET file=%s,uploaddate=%s WHERE Enrollment=%s AND asid=%s""", (new_file, formatted_date, session['Enrollment'],id))
 						flash('Assignment Successfully updated','success') 
 						return redirect(url_for('viewassignmentsb',id=id))
@@ -762,7 +754,7 @@ def uploadans():
 		return render_template('/StudentLogin/viewfullassign.html')
 	return redirect(url_for('login'))
 
-@app.route("/showallassignment/<string:sname>", methods=['GET', 'POST'])
+@application.route("/showallassignment/<string:sname>", methods=['GET', 'POST'])
 def showallassignment(sname):
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -773,7 +765,7 @@ def showallassignment(sname):
 		return render_template('/TeacherAdmin/showallassign.html',showst = data)
 	return redirect(url_for('teacherlogin'))
 
-@app.route('/editassign/<id>', methods = ['POST', 'GET'])
+@application.route('/editassign/<id>', methods = ['POST', 'GET'])
 def editassign(id):
 	cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 	cur.execute('SELECT * FROM crassignment WHERE id = %s', (id,))
@@ -782,19 +774,19 @@ def editassign(id):
 	print(data[0])	
 	return render_template('/TeacherAdmin/editallassign.html', showst = data[0])
 
-@app.route('/deleteassign/<string:id>', methods = ['POST','GET'])
+@application.route('/deleteassign/<string:id>', methods = ['POST','GET'])
 def deleteassign(id):
 	cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 	cur.execute('SELECT * FROM crassignment WHERE id = %s',(id,))
 	result=cur.fetchone()
 	data=result['sname']
 	print(result)
-	os.remove(os.path.join(app.config['UPLOAD_FOLDER'], result['file']))
+	os.remove(os.path.join(application.config['UPLOAD_FOLDER'], result['file']))
 	cur.execute('DELETE FROM crassignment WHERE id = %s',(id,))
 	flash('Assignment Data Removed Successfully','success')
 	return redirect(url_for('showallassignment',sname=data))
 
-@app.route("/statusforstudent/<string:sname>", methods=['GET', 'POST'])
+@application.route("/statusforstudent/<string:sname>", methods=['GET', 'POST'])
 def statusforstudent(sname):
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -805,7 +797,7 @@ def statusforstudent(sname):
 		return render_template('/StudentLogin/statusofassign.html',showstatus = data)
 	return redirect(url_for('login'))
 
-@app.route('/viewuploadans/<string:id>', methods = ['POST','GET'])
+@application.route('/viewuploadans/<string:id>', methods = ['POST','GET'])
 def viewuploadans(id):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -815,7 +807,7 @@ def viewuploadans(id):
 		return render_template('/StudentLogin/showuploadans.html',viewans = data)
 	return redirect(url_for('login'))
 
-@app.route('/downans/<file>', methods = ['GET'])
+@application.route('/downans/<file>', methods = ['GET'])
 def downans(file):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -827,7 +819,7 @@ def downans(file):
 		#return send_file(BytesIO(data.data),as_attachment=True,attachment_filename=data.file)
 	return redirect(url_for('login'))
 
-@app.route("/statusofstudent/<string:sname>", methods=['GET', 'POST'])
+@application.route("/statusofstudent/<string:sname>", methods=['GET', 'POST'])
 def statusofstudent(sname):
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -838,7 +830,7 @@ def statusofstudent(sname):
 		return render_template('/TeacherAdmin/statusofassign.html',showstatus = data)
 	return redirect(url_for('teacherlogin'))
 
-@app.route('/viewuploadansst/<string:id>', methods = ['POST','GET'])
+@application.route('/viewuploadansst/<string:id>', methods = ['POST','GET'])
 def viewuploadansst(id):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -848,7 +840,7 @@ def viewuploadansst(id):
 		return render_template('/TeacherAdmin/showuploadans.html',viewans = data)
 	return redirect(url_for('teacherlogin'))
 
-@app.route('/uploadmark', methods=['GET','POST'])
+@application.route('/uploadmark', methods=['GET','POST'])
 def uploadmark():
 	if g.email:
 		if request.method=='POST':
@@ -878,7 +870,7 @@ def uploadmark():
 		return render_template('/TeacherAdmin/showuploadans.html')
 	return redirect(url_for('teacherlogin'))
 
-@app.route('/updateprofilestudent', methods=['GET','POST'])
+@application.route('/updateprofilestudent', methods=['GET','POST'])
 def updateprofilestudent():
 	if g.email:
 		if request.method=='POST':
@@ -907,7 +899,7 @@ def updateprofilestudent():
 		return render_template('/StudentLogin/edit_profile.html', title='Edit Profile',form=form)
 	return redirect(url_for('stsignup'))
 
-@app.route('/updateprofileteacher', methods=['GET','POST'])
+@application.route('/updateprofileteacher', methods=['GET','POST'])
 def updateprofileteacher():
 	if g.email:
 		if request.method=='POST':
@@ -935,7 +927,7 @@ def updateprofileteacher():
 		return render_template('/TeacherAdmin/tedit_profile.html', title='Edit Profile',form=form)
 	return redirect(url_for('stsignup'))
 
-@app.route('/showprofessor')
+@application.route('/showprofessor')
 def showprofessor():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -946,7 +938,7 @@ def showprofessor():
 		return render_template('/ADMIN/showprofessor.html', showprofe = data)
 	return redirect(url_for('adminlogin'))
 
-@app.route('/editprof/<id>', methods = ['POST', 'GET'])
+@application.route('/editprof/<id>', methods = ['POST', 'GET'])
 def editprof(id):
 	form = EditTeacherProfile(request.form)
 	cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -956,7 +948,7 @@ def editprof(id):
 	print(data[0])
 	return render_template('/ADMIN/tedit_profile.html', showprofe = data[0],form=form)
  
-@app.route('/updateprof/<id>', methods=['POST'])
+@application.route('/updateprof/<id>', methods=['POST'])
 def updateprof(id):
 	if request.method == 'POST':
 		name = request.form['name']
@@ -980,14 +972,14 @@ def updateprof(id):
 		
 		return redirect(url_for('showprofessor'))
  
-@app.route('/deleteprof/<string:id>', methods = ['POST','GET'])
+@application.route('/deleteprof/<string:id>', methods = ['POST','GET'])
 def deleteprof(id):
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cur.execute('DELETE FROM teacherregister WHERE id = {0}'.format(id))
     flash('Professor Data Removed Successfully','success')
     return redirect(url_for('showprofessor'))
 
-@app.route("/viewuploadans/logout3")
+@application.route("/viewuploadans/logout3")
 def logout4():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -996,7 +988,7 @@ def logout4():
 	session.clear()
 	return redirect(url_for('login'))
 
-@app.route("/view/logout3")
+@application.route("/view/logout3")
 def logout5():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -1005,7 +997,7 @@ def logout5():
 	session.clear()
 	return redirect(url_for('login'))
 
-@app.route("/viewassignmentsb/logout3")
+@application.route("/viewassignmentsb/logout3")
 def logout6():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -1014,35 +1006,35 @@ def logout6():
 	session.clear()
 	return redirect(url_for('login'))
 
-@app.route("/editassign/logout2")
+@application.route("/editassign/logout2")
 def logout7():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('teacherlogin'))
 
-@app.route("/viewuploadansst/logout2")
+@application.route("/viewuploadansst/logout2")
 def logout8():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('teacherlogin'))
 
-@app.route('/edit/logout1')
+@application.route('/edit/logout1')
 def logout9():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('adminlogin'))
 
-@app.route('/editprof/logout1')
+@application.route('/editprof/logout1')
 def logout10():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('adminlogin'))
 
-@app.route('/updateassign/<id>', methods=['POST'])
+@application.route('/updateassign/<id>', methods=['POST'])
 def updateassign(id):
 	if request.method == 'POST':
 		file=request.files['inputFile']
@@ -1062,9 +1054,9 @@ def updateassign(id):
 		cur.execute('SELECT * FROM crassignment WHERE id = %s',(id,))
 		result=cur.fetchone()
 		print(result)
-		os.remove(os.path.join(app.config['UPLOAD_FOLDER'], result['file']))
+		os.remove(os.path.join(application.config['UPLOAD_FOLDER'], result['file']))
 		if file and allowed_file(file.filename):
-			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			file.save(os.path.join(application.config['UPLOAD_FOLDER'], filename))
 			cur.execute("""UPDATE crassignment
        		SET stitle = %s,Tid = %s,pdpart=%s,sem=%s,sname=%s,name = %s,email=%s,file=%s,sdate=%s,ddate=%s,adescription=%s,amark=%s
        		WHERE id = %s
@@ -1075,7 +1067,7 @@ def updateassign(id):
 			flash('Invalid Uplaod only txt, pdf, doc,docx','danger') 
 	return redirect(url_for('editassign',id=id))
 
-@app.route("/showsubjectassignment", methods=['GET', 'POST'])
+@application.route("/showsubjectassignment", methods=['GET', 'POST'])
 def showsubjectassignment():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -1086,7 +1078,7 @@ def showsubjectassignment():
 		return render_template('/StudentLogin/showstatussubject.html',showst = data)
 	return redirect(url_for('login'))
 
-@app.route("/statusforstudent/logout3")
+@application.route("/statusforstudent/logout3")
 def logout11():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -1095,7 +1087,7 @@ def logout11():
 	session.clear()
 	return redirect(url_for('login'))
 
-@app.route("/statusofstudent/logout2")
+@application.route("/statusofstudent/logout2")
 def logout12():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -1104,7 +1096,7 @@ def logout12():
 	session.clear()
 	return redirect(url_for('teacherlogin'))
 
-@app.route("/showsubjectassignmentbytecher", methods=['GET', 'POST'])
+@application.route("/showsubjectassignmentbytecher", methods=['GET', 'POST'])
 def showsubjectassignmentbytecher():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -1125,7 +1117,7 @@ class Announcement(db.Model):
 	sem = db.Column(db.String(120),	nullable=False)
 	adescription = db.Column(db.String(200), nullable=False)
 
-@app.route('/announcement',methods=['POST'])
+@application.route('/announcement',methods=['POST'])
 def announcement():
 	if g.email:
 		if request.method=='POST':
@@ -1146,7 +1138,7 @@ def announcement():
 	return redirect(url_for('teacherlogin'))
 
 
-@app.route("/showsubjectdetail", methods=['GET', 'POST'])
+@application.route("/showsubjectdetail", methods=['GET', 'POST'])
 def showsubjectdetail():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -1158,7 +1150,7 @@ def showsubjectdetail():
 	return redirect(url_for('login'))
 
 
-@app.route("/forgot", methods=['GET', 'POST'])
+@application.route("/forgot", methods=['GET', 'POST'])
 def forgot():
 	form = RequestResetForm()
 	if request.method=='POST' and form.validate_on_submit():
@@ -1183,7 +1175,7 @@ def forgot():
 			flash("Email Do Not Match",'danger')
 	return render_template('stforgot.html', title='Forgot Password', form=form)
 
-@app.route("/reset/<token>", methods=['GET', 'POST'])
+@application.route("/reset/<token>", methods=['GET', 'POST'])
 def reset(token):
 	form = ResetPasswordForm()
 	if request.method=='POST' and form.validate_on_submit():
@@ -1206,7 +1198,7 @@ def reset(token):
 			flash("Your Link is Expired",'danger')
 	return render_template('stforgotpass.html', title='Forgot Password', form=form)
 
-@app.route("/tforgot", methods=['GET', 'POST'])
+@application.route("/tforgot", methods=['GET', 'POST'])
 def tforgot():
 	form = RequestResetForm()
 	if request.method=='POST' and form.validate_on_submit():
@@ -1231,7 +1223,7 @@ def tforgot():
 			flash("Email is Not Registered",'danger')
 	return render_template('tforgot.html', title='Forgot Password', form=form)
 
-@app.route("/treset/<token>", methods=['GET', 'POST'])
+@application.route("/treset/<token>", methods=['GET', 'POST'])
 def treset(token):
 	form = ResetPasswordForm()
 	if request.method=='POST' and form.validate_on_submit():
@@ -1254,14 +1246,14 @@ def treset(token):
 			flash("Your Link is Expired",'danger')
 	return render_template('tforgotpass.html', title='Forgot Password', form=form)
 
-@app.route("/teacherprofile/logout2")
+@application.route("/teacherprofile/logout2")
 def logout13():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('teacherlogin'))
 
-@app.route("/changepasswd/<Enrollment>",methods=['GET', 'POST'])
+@application.route("/changepasswd/<Enrollment>",methods=['GET', 'POST'])
 def changepasswd(Enrollment):
 	if g.email:
 		form = ChangePasswordForm()
@@ -1289,7 +1281,7 @@ def changepasswd(Enrollment):
 		return render_template('/StudentLogin/changepasswd.html',title='Change Password', form=form)
 	return redirect(url_for('login'))
 
-@app.route("/changepasswd/logout3")
+@application.route("/changepasswd/logout3")
 def logout14():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -1298,7 +1290,7 @@ def logout14():
 	session.clear()
 	return redirect(url_for('login'))
 
-@app.route("/changepasswdteacher/<Tid>",methods=['GET', 'POST'])
+@application.route("/changepasswdteacher/<Tid>",methods=['GET', 'POST'])
 def changepasswdteacher(Tid):
 	if g.email:
 		form = ChangePasswordForm()
@@ -1328,19 +1320,19 @@ def changepasswdteacher(Tid):
 		return render_template('/TeacherAdmin/changepasswdteacher.html',title='Change Password', form=form)
 	return redirect(url_for('teacherlogin'))
 
-@app.route("/changepasswdteacher/logout2")
+@application.route("/changepasswdteacher/logout2")
 def logout15():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('teacherlogin'))
 
-@app.errorhandler(413)
+@application.errorhandler(413)
 def too_large(e):
 	flash('Maximum File Size is 10MB','danger')
 	return redirect(url_for('createassignment'))
 
-@app.route('/viewassignmentbyprofessor/<string:id>', methods = ['POST','GET'])
+@application.route('/viewassignmentbyprofessor/<string:id>', methods = ['POST','GET'])
 def viewassignmentbyprofessor(id):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -1350,7 +1342,7 @@ def viewassignmentbyprofessor(id):
 		return render_template('/TeacherAdmin/showfullassignteacher.html',showstsb = data)
 	return redirect(url_for('login'))
 
-@app.route("/showsubjectwiseassignmentbytecher", methods=['GET', 'POST'])
+@application.route("/showsubjectwiseassignmentbytecher", methods=['GET', 'POST'])
 def showsubjectwiseassignmentbytecher():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -1362,14 +1354,14 @@ def showsubjectwiseassignmentbytecher():
 	return redirect(url_for('teacherlogin'))
 
 
-@app.route("/showallassignment/logout2")
+@application.route("/showallassignment/logout2")
 def logout16():
 	session.pop('loggedin', None)
 	session.pop('email', None)
 	session.clear()
 	return redirect(url_for('teacherlogin'))
 
-@app.route("/viewassignmentbyprofessor/logout2")
+@application.route("/viewassignmentbyprofessor/logout2")
 def logout17():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -1377,7 +1369,7 @@ def logout17():
 	return redirect(url_for('teacherlogin'))
 
 
-@app.route("/studentprofile/logout3")
+@application.route("/studentprofile/logout3")
 def logout18():
 	session.pop('loggedin', None)
 	session.pop('email', None)
@@ -1386,7 +1378,7 @@ def logout18():
 	session.clear()
 	return redirect(url_for('login'))
 
-@app.route("/addnewstudent", methods=['GET', 'POST'])
+@application.route("/addnewstudent", methods=['GET', 'POST'])
 def addnewstudent():
 	if g.email:
 		form = StudentRegistrationForm(request.form)
@@ -1426,7 +1418,7 @@ def addnewstudent():
 		return render_template('/ADMIN/addnewstudent.html', title='Register', form=form)
 	return redirect(url_for('adminlogin'))
 
-@app.route("/addnewprofessor",methods =['GET', 'POST'])
+@application.route("/addnewprofessor",methods =['GET', 'POST'])
 def addnewprofessor():
 	if g.email:
 		form = AdminTeacherRegistrationForm(request.form)
@@ -1467,7 +1459,7 @@ def addnewprofessor():
 	return redirect(url_for('adminlogin'))
 
 
-@app.route('/authorizestudent')
+@application.route('/authorizestudent')
 def authorizestudent():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -1478,7 +1470,7 @@ def authorizestudent():
 		return render_template('/ADMIN/authorizeadmin.html', employee = data)
 	return redirect(url_for('adminlogin'))
 
-@app.route('/authorizationstudent/<id>', methods = ['POST', 'GET'])
+@application.route('/authorizationstudent/<id>', methods = ['POST', 'GET'])
 def authorizationstudent(id):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -1494,7 +1486,7 @@ def authorizationstudent(id):
 			return redirect(url_for('authorizestudent'))
 	return redirect(url_for('adminlogin'))
 
-@app.route('/authorizeteacher')
+@application.route('/authorizeteacher')
 def authorizeteacher():
 	if g.email:
 		cursor = mysql.connection.cursor()
@@ -1505,7 +1497,7 @@ def authorizeteacher():
 		return render_template('/ADMIN/authorizeprofessor.html', employee = data)
 	return redirect(url_for('adminlogin'))
 
-@app.route('/authorizationforprofessor/<id>', methods = ['POST', 'GET'])
+@application.route('/authorizationforprofessor/<id>', methods = ['POST', 'GET'])
 def authorizationforprofessor(id):
 	if g.email:
 		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -1522,14 +1514,14 @@ def authorizationforprofessor(id):
 	return redirect(url_for('adminlogin'))
 
 
-@app.errorhandler(Exception)
+@application.errorhandler(Exception)
 def exception_handler(error):
 	return render_template('index.html')  + repr(error)
 
 
-app.secret_key="12345678"
-app.run(debug=True)
+application.secret_key="12345678"
+application.run(debug=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)
 
