@@ -775,24 +775,28 @@ def showallassignment(sname):
 
 @application.route('/editassign/<id>', methods = ['POST', 'GET'])
 def editassign(id):
-	cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-	cur.execute('SELECT * FROM crassignment WHERE id = %s', (id,))
-	data = cur.fetchall()
-	cur.close()
-	print(data[0])	
-	return render_template('/TeacherAdmin/editallassign.html', showst = data[0])
+	if g.email:
+		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+		cur.execute('SELECT * FROM crassignment WHERE id = %s', (id,))
+		data = cur.fetchall()
+		cur.close()
+		print(data[0])	
+		return render_template('/TeacherAdmin/editallassign.html', showst = data[0])
+	return redirect(url_for('teacherlogin'))
 
 @application.route('/deleteassign/<string:id>', methods = ['POST','GET'])
 def deleteassign(id):
-	cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-	cur.execute('SELECT * FROM crassignment WHERE id = %s',(id,))
-	result=cur.fetchone()
-	data=result['sname']
-	print(result)
-	os.remove(os.path.join(application.config['UPLOAD_FOLDER'], result['file']))
-	cur.execute('DELETE FROM crassignment WHERE id = %s',(id,))
-	flash('Assignment Data Removed Successfully','success')
-	return redirect(url_for('showallassignment',sname=data))
+	if g.email:
+		cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+		cur.execute('SELECT * FROM crassignment WHERE id = %s',(id,))
+		result=cur.fetchone()
+		data=result['sname']
+		print(result)
+		os.remove(os.path.join(application.config['UPLOAD_FOLDER'], result['file']))
+		cur.execute('DELETE FROM crassignment WHERE id = %s',(id,))
+		flash('Assignment Data Removed Successfully','success')
+		return redirect(url_for('showallassignment',sname=data))
+	return redirect(url_for('teacherlogin'))
 
 @application.route("/statusforstudent/<string:sname>", methods=['GET', 'POST'])
 def statusforstudent(sname):
