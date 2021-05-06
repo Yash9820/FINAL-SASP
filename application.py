@@ -1527,9 +1527,7 @@ def authorizationforprofessor(id):
 	return redirect(url_for('adminlogin'))
 
 
-@application.errorhandler(Exception)
-def exception_handler(error):
-	return render_template('index.html')  + repr(error)
+
 
 
 application.secret_key="12345678"
